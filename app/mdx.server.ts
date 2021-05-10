@@ -3,7 +3,7 @@ import path from "path";
 
 export { bundleMDX } from "mdx-bundler";
 
-export async function getContents(relativeFilename: string) {
+export async function getLocalContents(relativeFilename: string) {
   const filename = path.join(
     process.cwd(),
     "articles",
