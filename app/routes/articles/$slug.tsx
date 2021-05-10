@@ -1,30 +1,27 @@
-import { bundleMDX } from "../../mdx.server";
+import { json, useRouteData } from "remix";
+import type { LoaderFunction } from "remix";
+import { bundleMDX, getContents } from "../../mdx.server";
 import { Post } from "../../mdx";
-import { useRouteData } from "remix";
 
-export const loader = () => {
-  const mdxSource = `
----
-title: Example Post
-published: 2021-02-13
-description: This is some description
----
-
-# Wahoo
-
-Here's a **neat** demo:
-
-`.trim();
-
-  return bundleMDX(mdxSource, {});
+export const loader: LoaderFunction = async (
+  request
+): Promise<{ code: string; frontmatter: { [key: string]: any } }> => {
+  const mdxContents = await getContents(request.params.slug);
+  console.log("ontents", mdxContents);
+  if (!mdxContents) {
+    return json({ notFound: true }, { status: 404 });
+  }
+  return bundleMDX(mdxContents, {});
 };
 
 export default function BlogPost() {
   const data = useRouteData();
+  if (data.notFound) {
+    return <div>not found</div>;
+  }
   console.log(data, Post);
   return (
     <div>
-      <pre>{JSON.stringify(data)}</pre>
       <Post code={data.code} frontmatter={data.frontmatter} />
     </div>
   );
