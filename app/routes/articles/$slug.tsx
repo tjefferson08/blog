@@ -17,8 +17,8 @@ export const loader: LoaderFunction = async ({
   const contentRequest = new Request(url.toString());
   console.log("contentrequest", contentRequest);
   const contentResponse = await fetch(contentRequest);
-  if (!contentResponse.ok) {
-    return contentResponse;
+  if (contentResponse.status === 404) {
+    return { status: "not-found" };
   }
   const t = await contentResponse.text();
   console.log(t);
@@ -29,6 +29,9 @@ export const loader: LoaderFunction = async ({
 export default function BlogPost() {
   const data = useRouteData();
   console.log("data", data);
+  if (data.status === "not-found") {
+    return <div> not found I guess</div>;
+  }
   return (
     <div>
       <Post code={data.code} frontmatter={data.frontmatter} />
