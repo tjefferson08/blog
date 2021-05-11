@@ -3,10 +3,15 @@ import type { LoaderFunction } from "remix";
 import { bundleMDX, getLocalContents } from "../../mdx.server";
 import { Post } from "../../mdx";
 
-export const loader: LoaderFunction = async ({
-  request,
-  params,
-}): Promise<{ code: string; frontmatter: { [key: string]: any } }> => {
+type MDXResponse =
+  | {
+      status: "success";
+      code: string;
+      frontmatter: { [key: string]: any };
+    }
+  | { status: "not-found" };
+
+export const loader: LoaderFunction = async ({ request, params }) => {
   console.log("request", request);
   console.log("params", params);
 
@@ -18,20 +23,25 @@ export const loader: LoaderFunction = async ({
   console.log("contentrequest", contentRequest);
   const contentResponse = await fetch(contentRequest);
   if (contentResponse.status === 404) {
-    return { status: "not-found" };
+    return json({ status: "not-found" }, { status: 404 });
   }
-  const t = await contentResponse.text();
-  console.log(t);
 
-  return bundleMDX(t, {});
+  const mdxText = await contentResponse.text();
+  const mdxData = await bundleMDX(mdxText, {});
+
+  return json({
+    status: "success",
+    ...mdxData,
+  });
 };
 
 export default function BlogPost() {
-  const data = useRouteData();
-  console.log("data", data);
+  const data = useRouteData<MDXResponse>();
+
   if (data.status === "not-found") {
     return <div> not found I guess</div>;
   }
+
   return (
     <div>
       <Post code={data.code} frontmatter={data.frontmatter} />
