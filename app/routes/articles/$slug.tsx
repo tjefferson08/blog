@@ -12,22 +12,38 @@ type MDXResponse =
   | { status: "not-found" };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  console.log("request", request);
-  console.log("params", params);
-
   const { protocol, host } = new URL(request.url);
   const url = new URL(
-    `${protocol}//${host}:3000/static/articles/${params.slug}/index.mdx`
+    `${protocol}//${host}:3000/static/articles/${params.slug}`
   );
-  const contentRequest = new Request(url.toString());
-  console.log("contentrequest", contentRequest);
-  const contentResponse = await fetch(contentRequest);
+
+  const [contentResponse, manifestResponse] = await Promise.all([
+    fetch(`${url}/index.mdx`),
+    fetch(`${url}/manifest.json`),
+  ]);
+
   if (contentResponse.status === 404) {
     return json({ status: "not-found" }, { status: 404 });
   }
 
+  const additionalFiles = manifestResponse.ok
+    ? (await manifestResponse.json()).assets
+    : [];
+
+  const additionalAssetsByFilename = Object.fromEntries(
+    await Promise.all(
+      additionalFiles.map(async (filename: string) => {
+        const resp = await fetch(`${url}/${filename}`);
+        const contents = await resp.text();
+        return [filename, contents];
+      })
+    )
+  );
+
   const mdxText = await contentResponse.text();
-  const mdxData = await bundleMDX(mdxText, {});
+  const mdxData = await bundleMDX(mdxText, {
+    files: additionalAssetsByFilename,
+  });
 
   return json({
     status: "success",
