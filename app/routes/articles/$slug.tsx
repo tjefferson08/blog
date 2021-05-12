@@ -12,12 +12,12 @@ type MDXResponse =
   | { status: "not-found" };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const { protocol, host } = new URL(request.url);
-  const url = new URL(
-    `${protocol}//${host}:3000/static/articles/${params.slug}`
-  );
+  const baseURL =
+    process.env.NODE_ENV === "production"
+      ? "https://blog.travisjefferson.com"
+      : `http://127.0.0.1:${process.env.PORT || 3000}`;
 
-  return bundleMDXFor(url.toString());
+  return bundleMDXFor(`${baseURL}/static/articles/${params.slug}`);
 };
 
 export default function BlogPost() {

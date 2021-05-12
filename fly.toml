@@ -1,6 +1,6 @@
-# fly.toml file generated for shy-leaf-1582 on 2021-05-10T23:00:54-04:00
+# fly.toml file generated for fragrant-wave-9653 on 2021-05-11T22:41:09-04:00
 
-app = "shy-leaf-1582"
+app = "fragrant-wave-9653"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
@@ -12,6 +12,7 @@ kill_timeout = 5
   PORT = "8080"
 
 [experimental]
+  allowed_public_ports = []
   auto_rollback = true
 
 [[services]]
