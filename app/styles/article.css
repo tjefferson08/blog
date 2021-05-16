@@ -1,0 +1,3 @@
+code [data-line-number]::before {
+    content: attr(data-line-number)
+}
