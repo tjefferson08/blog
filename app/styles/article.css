@@ -1,3 +1,6 @@
+* {
+  color: var(--base05);
+}
 code [data-line-number]::before {
   content: attr(data-line-number);
   width: 2rem;
@@ -14,6 +17,24 @@ pre {
   line-height: 1.5;
 }
 
+.hljs-comment {
+  color: var(--base03);
+}
+
 .hljs-keyword {
   color: var(--base08);
+}
+
+.hljs-string {
+  color: var(--base0B);
+}
+
+.hljs-function,
+.hljs-built_in,
+.hljs-method {
+  color: var(--base0D);
+}
+
+.hljs-number {
+  color: var(--base09);
 }
