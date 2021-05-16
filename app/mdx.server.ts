@@ -88,15 +88,20 @@ function wrapLines(children: Node[]) {
     children: lineOfChildren,
   }));
 
+  // TODO write tests
+  // example: [{ // comment }, { text: '\n\n' }]
+  // example: [{ text: '\n'}]
+  // example: [{ text: '{\n  '}]
   function partitionByLine(children: Node[]): Node[][] {
-    const lines = [];
-    let line = [];
+    const lines: Node[][] = [];
+    let line: Node[] = [];
     for (const child of children) {
       console.log("child", child);
       if (child.type === "text" && child.value?.includes("\n")) {
-        const [primaryLine, ...embeddedLines] = child.value.split("\n");
+        const [primaryLine, ...embeddedLines] =
+          child.value.match(/(.*\n|.+)/g) || [];
 
-        const nodeFor = (l: string) => ({ type: "text", value: l + "\n" });
+        const nodeFor = (l: string) => ({ type: "text", value: l });
 
         // push primary line as part of line in progress
         line.push(nodeFor(primaryLine));
@@ -105,10 +110,20 @@ function wrapLines(children: Node[]) {
 
         // push embedded lines as extras
         lines.push(...embeddedLines.slice(0, -1).map((l) => [nodeFor(l)]));
+
+        // last line might be a complete line, or may have some trailing
+        // characters to begin the next line (typically whitespace I guess)
+        const [lastLine] = embeddedLines.slice(-1);
+
+        if (lastLine.includes("\n")) {
+          lines.push([nodeFor(lastLine)]);
+        } else {
+          line = [nodeFor(lastLine)];
+        }
       } else {
         line.push(child);
       }
     }
-    return lines;
+    return lines.concat(line.length ? [line] : []);
   }
 }
