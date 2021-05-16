@@ -2,9 +2,30 @@
   outline: none;
 }
 
-body {
-  font-family: sans-serif;
-  background-color: var(--base00);
+@media (prefers-color-scheme: light) {
+  /* TODO: base16 for light mode */
+  body {
+    background: #ffffff;
+  }
+  /* classic-light: https://github.com/detly/base16-classic-scheme */
+  :root {
+    --base00: #f5f5f5;
+    --base01: #e0e0e0;
+    --base02: #d0d0d0;
+    --base03: #b0b0b0;
+    --base04: #505050;
+    --base05: #303030;
+    --base06: #202020;
+    --base07: #151515;
+    --base08: #ac4142;
+    --base09: #d28445;
+    --base0A: #f4bf75;
+    --base0B: #90a959;
+    --base0C: #75b5aa;
+    --base0D: #6a9fb5;
+    --base0E: #aa759f;
+    --base0F: #8f5536;
+  }
 }
 
 footer {
@@ -13,23 +34,30 @@ footer {
   padding-top: 80px;
 }
 
-:root {
-  --base00: #272822;
-  --base01: #383830;
-  --base02: #49483e;
-  --base03: #75715e;
-  --base04: #a59f85;
-  --base05: #f8f8f2;
-  --base06: #f5f4f1;
-  --base07: #f9f8f5;
-  --base08: #f92672;
-  --base09: #fd971f;
-  --base0A: #f4bf75;
-  --base0B: #a6e22e;
-  --base0C: #a1efe4;
-  --base0D: #66d9ef;
-  --base0E: #ae81ff;
-  --base0F: #cc6633;
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #fcfcfc;
+  }
+
+  /* monkai for dark: https://github.com/chriskempson/base16-vim/blob/master/colors/base16-monokai.vim */
+  :root {
+    --base00: #272822;
+    --base01: #383830;
+    --base02: #49483e;
+    --base03: #75715e;
+    --base04: #a59f85;
+    --base05: #f8f8f2;
+    --base06: #f5f4f1;
+    --base07: #f9f8f5;
+    --base08: #f92672;
+    --base09: #fd971f;
+    --base0A: #f4bf75;
+    --base0B: #a6e22e;
+    --base0C: #a1efe4;
+    --base0D: #66d9ef;
+    --base0E: #ae81ff;
+    --base0F: #cc6633;
+  }
 }
 
 /***
