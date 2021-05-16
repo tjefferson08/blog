@@ -12,10 +12,15 @@ code [data-line-number] {
   position: relative;
 }
 
+pre code {
+  font-family: "Source Code Pro", monospace;
+}
+
 pre {
   padding: 1rem;
   line-height: 1.5;
   background: var(--base00);
+  font-family: "Source Code Pro", monospace;
 }
 
 .hljs-comment {
