@@ -2,16 +2,15 @@ import { json } from "remix";
 import { bundleMDX } from "mdx-bundler";
 import highlight from "rehype-highlight";
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://blog.travisjefferson.com"
-    : `http://127.0.0.1:${process.env.PORT || 3000}`;
+const BASE_URL = `https://api.github.com/repos/tjefferson08/blog/contents/articles`;
 
-export async function bundleMDXFor(path: string) {
-  const url = `${BASE_URL}${path}`;
+export async function bundleMDXFor(slug: string) {
+  const url = `${BASE_URL}/${slug}`;
   const [contentResponse, manifestResponse] = await Promise.all([
-    fetch(`${url}/index.mdx`),
-    fetch(`${url}/manifest.json`),
+    fetch(`${url}.mdx`, {
+      headers: { Accept: "application/vnd.github.v3.raw" },
+    }),
+    fetch(url),
   ]);
 
   if (contentResponse.status === 404) {
@@ -19,16 +18,18 @@ export async function bundleMDXFor(path: string) {
   }
 
   const additionalFiles = manifestResponse.ok
-    ? (await manifestResponse.json()).assets
+    ? await manifestResponse.json()
     : [];
 
   const additionalAssetsByFilename = Object.fromEntries(
     await Promise.all(
-      additionalFiles.map(async (filename: string) => {
-        const resp = await fetch(`${url}/${filename}`);
-        const contents = await resp.text();
-        return [filename, contents];
-      })
+      additionalFiles.map(
+        async (file: { name: string; download_url: string }) => {
+          const resp = await fetch(file.download_url);
+          const contents = await resp.text();
+          return [`./${slug}/${file.name}`, contents];
+        }
+      )
     )
   );
 
@@ -80,7 +81,6 @@ type Node = {
 // assumes newlines appear at tree depth of 1
 function wrapLines(children: Node[]) {
   const partitionedChildren = partitionByLine(children);
-  console.log("partitioned", partitionedChildren);
   return partitionedChildren.map((lineOfChildren, n) => ({
     type: "element",
     tagName: "span",
@@ -96,7 +96,6 @@ function wrapLines(children: Node[]) {
     const lines: Node[][] = [];
     let line: Node[] = [];
     for (const child of children) {
-      console.log("child", child);
       if (child.type === "text" && child.value?.includes("\n")) {
         const [primaryLine, ...embeddedLines] =
           child.value.match(/(.*\n|.+)/g) || [];

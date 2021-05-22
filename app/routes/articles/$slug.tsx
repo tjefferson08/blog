@@ -1,11 +1,11 @@
-import { useRouteData } from "remix";
-import type { LoaderFunction } from "remix";
+import { Headers, useRouteData } from "remix";
+import type { HeadersFunction, LoaderFunction } from "remix";
 import { bundleMDXFor } from "../../mdx.server";
 import { Post } from "../../mdx";
-import articleStyles from '../../styles/article.css'
+import articleStyles from "../../styles/article.css";
 
 export function links() {
-    return [{ rel: 'stylesheet', href: articleStyles }]
+  return [{ rel: "stylesheet", href: articleStyles }];
 }
 
 type MDXResponse =
@@ -17,7 +17,17 @@ type MDXResponse =
   | { status: "not-found" };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  return bundleMDXFor(`/static/articles/${params.slug}`);
+  return bundleMDXFor(params.slug);
+};
+
+export const headers: HeadersFunction = ({
+  loaderHeaders,
+}: {
+  loaderHeaders: Headers;
+}) => {
+  const headers = new Headers(loaderHeaders);
+  headers.set("Cache-Control", "max-age=300");
+  return headers;
 };
 
 export default function BlogPost() {
