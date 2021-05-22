@@ -84,3 +84,25 @@ footer {
  * base0E - Keywords, Storage, Selector, Markup Italic, Diff Changed
  * base0F - Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
  **/
+
+header.breadcrumbs ul {
+  list-style: none;
+  display: flex;
+}
+
+header.breadcrumbs li {
+  padding: 0.5rem;
+  flex-flow: row wrap;
+  flex: 1;
+  max-width: 100px;
+}
+
+.breadcrumbs li::after {
+  content: "/";
+  width: 0.5rem;
+  margin-left: 1.5rem;
+}
+
+.breadcrumbs li:last-child::after {
+  content: "";
+}

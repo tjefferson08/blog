@@ -20,6 +20,12 @@ export const loader: LoaderFunction = async ({ params }) => {
   return bundleMDXFor(params.slug);
 };
 
+export const handle = {
+  breadcrumb: (match) => {
+    return <span>{match.data.frontmatter.title}</span>;
+  },
+};
+
 export const headers: HeadersFunction = () => {
   return { "Cache-Control": "max-age=1800" };
 };

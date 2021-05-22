@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction } from "remix";
+import { LinksFunction, LoaderFunction, useMatches } from "remix";
 import { Meta, Links, Scripts, useRouteData, LiveReload } from "remix";
 import { Outlet } from "react-router-dom";
 
@@ -40,8 +40,18 @@ function Document({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   let data = useRouteData();
+  const matches = useMatches();
   return (
     <Document>
+      <header className="breadcrumbs">
+        <ul>
+          {matches
+            .filter((match) => match.handle?.breadcrumb)
+            .map((match, idx) => (
+              <li key={idx}>{match.handle.breadcrumb(match)}</li>
+            ))}
+        </ul>
+      </header>
       <Outlet />
       <footer>
         <p>This page was rendered at {data.date.toLocaleString()}</p>
