@@ -20,14 +20,8 @@ export const loader: LoaderFunction = async ({ params }) => {
   return bundleMDXFor(params.slug);
 };
 
-export const headers: HeadersFunction = ({
-  loaderHeaders,
-}: {
-  loaderHeaders: Headers;
-}) => {
-  const headers = new Headers(loaderHeaders);
-  headers.set("Cache-Control", "max-age=300");
-  return headers;
+export const headers: HeadersFunction = () => {
+  return { "Cache-Control": "max-age=1800" };
 };
 
 export default function BlogPost() {
