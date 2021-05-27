@@ -1,5 +1,6 @@
 import { Headers, useRouteData } from "remix";
 import type { HeadersFunction, LoaderFunction } from "remix";
+import { commitSession, getSession } from "../../sessions";
 import { bundleMDXFor } from "../../mdx.server";
 import { Post } from "../../mdx";
 import articleStyles from "../../styles/article.css";
@@ -16,18 +17,23 @@ type MDXResponse =
     }
   | { status: "not-found" };
 
-export const loader: LoaderFunction = async ({ params }) => {
-  return bundleMDXFor(params.slug);
+export const loader: LoaderFunction = async ({ params, request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  session.set("recentlyViewed", [
+    ...(session.get("recentlyViewed") || []),
+    params.slug,
+  ]);
+  const response = (await bundleMDXFor(params.slug)).clone();
+
+  response.headers.set("Cache-Control", "max-age=1800");
+  response.headers.set("Set-Cookie", await commitSession(session));
+  return response;
 };
 
 export const handle = {
   breadcrumb: (match) => {
     return <span>{match.data.frontmatter.title}</span>;
   },
-};
-
-export const headers: HeadersFunction = () => {
-  return { "Cache-Control": "max-age=1800" };
 };
 
 export default function BlogPost() {
