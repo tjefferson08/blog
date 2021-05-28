@@ -30,7 +30,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
 export const handle = {
   breadcrumb: (match) => {
-    return <span>{match.data.frontmatter.title}</span>;
+    return <span>{match.data.frontmatter.title || "This article"}</span>;
   },
 };
 

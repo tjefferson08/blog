@@ -1,6 +1,12 @@
 * {
   color: var(--base05);
 }
+
+body {
+  max-width: 75%;
+  margin: 0 auto;
+}
+
 code [data-line-number]::before {
   content: attr(data-line-number);
   width: 2rem;
