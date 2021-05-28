@@ -19,10 +19,8 @@ type MDXResponse =
 
 export const loader: LoaderFunction = async ({ params, request }) => {
   const session = await getSession(request.headers.get("Cookie"));
-  session.set("recentlyViewed", [
-    ...(session.get("recentlyViewed") || []),
-    params.slug,
-  ]);
+  const recents = [...(session.get("recentlyViewed") || []), params.slug];
+  session.set("recentlyViewed", [...new Set(recents)]);
   const response = (await bundleMDXFor(params.slug)).clone();
 
   response.headers.set("Cache-Control", "max-age=1800");
