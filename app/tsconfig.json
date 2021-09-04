@@ -6,6 +6,8 @@
     "moduleResolution": "node",
     "target": "es2019",
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+    "paths": { "~/*": ["./app/*"] }
   }
 }
