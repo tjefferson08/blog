@@ -1,4 +1,16 @@
+---
+meta:
+  title: My First Post
+  description: Isn't this awesome?
+headers:
+  Cache-Control: no-cache
+---
+
 # Dump
+
+iT is nteat
+
+```
 
 npx aka npm exec
 
@@ -10,6 +22,12 @@ toss a package.json and an `#!/usr/bin/env node` script in there and you're cook
 
 package.json#files to add extra files to your "binary"
 
-then, invocation happens... well, anywhere! so you gotta load your "assets" using something oriented to the location of the installed binary, like __dirname (not `.`` or process.cwd())
+then, invocation happens... well, anywhere! so you gotta load your "assets" using something oriented to the location of the installed binary, like \_\_dirname (not `.`` or process.cwd())
 
 my approach had a limitation on a generated JSON artifact; if you use the repository as your registry, you'll get silly stuff stuck muddying up your commit history / diffs (DUH!!!)
+
+```
+
+```
+
+```

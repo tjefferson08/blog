@@ -1,0 +1,20 @@
+name = "remix-blog-cloudflare-workers"
+type = "javascript"
+
+account_id = "cd438366c0c4227fc69b64984c6b2872"
+zone_id = "b20e359a0116b64eb32ada58fcd966b8"
+route = "blog.travisjefferson.com/*"
+workers_dev = false
+compatibility_date = "2021-10-09"
+
+[site]
+bucket = "./public"
+entry-point = "."
+
+[build]
+command = "npm run build:worker"
+watch_dir = "build"
+
+[build.upload]
+format="service-worker"
+

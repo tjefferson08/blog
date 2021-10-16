@@ -1,6 +1,15 @@
-import { LinksFunction, LoaderFunction, useMatches } from "remix";
-import { Meta, Links, Scripts, useRouteData, LiveReload } from "remix";
-import { Outlet } from "react-router-dom";
+import {
+  LinksFunction,
+  LoaderFunction,
+  useMatches,
+  useLoaderData,
+  Meta,
+  Links,
+  Scripts,
+  useCatch,
+  LiveReload,
+  Outlet,
+} from "remix";
 
 import stylesUrl from "./styles/global.css";
 
@@ -32,7 +41,7 @@ function Document({ children }: { children: React.ReactNode }) {
       <body>
         {children}
 
-        {/* <Scripts /> */}
+        <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
@@ -40,7 +49,7 @@ function Document({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  let data = useRouteData();
+  let data = useLoaderData();
   const matches = useMatches();
   return (
     <Document>
@@ -61,9 +70,32 @@ export default function App() {
   );
 }
 
+export function CatchBoundary() {
+  let caught = useCatch();
+
+  switch (caught.status) {
+    case 401:
+    case 404:
+      return (
+        <Document title={`${caught.status} ${caught.statusText}`}>
+          <h1>
+            {caught.status} {caught.statusText}
+          </h1>
+        </Document>
+      );
+
+    default:
+      throw new Error(
+        `Unexpected caught response with status: ${caught.status}`
+      );
+  }
+}
+
 export function ErrorBoundary({ error }: { error: Error }) {
+  console.error(error);
+
   return (
-    <Document>
+    <Document title="Uh-oh!">
       <h1>App Error</h1>
       <pre>{error.message}</pre>
       <p>
