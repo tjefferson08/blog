@@ -1,3 +1,11 @@
+---
+meta:
+  title: Jest vs the Browser for Testing
+  description: Why is this so hard
+headers:
+  Cache-Control: max-age=3600
+---
+
 # Intro
 
 So I was (over-)thinking about testing my remix project...
@@ -16,10 +24,10 @@ So what I think I need is a way to turn:
 
 ```jsx
 // add.test.js
-import { add } from 'add'
+import { add } from "add";
 
-test('add works', () => {
-  assert(add(1, 2) === 3, 'addition!')
+test("add works", () => {
+  assert(add(1, 2) === 3, "addition!");
 });
 ```
 
@@ -39,14 +47,15 @@ export default function TestHarness() {
 ```
 
 # Browser concerns
-* requires special bundling and loading of test files
-* parallelization concerns? node + jsdom may have better perf characteristics than one browser? multiple tabs? IDK
+
+- requires special bundling and loading of test files
+- parallelization concerns? node + jsdom may have better perf characteristics than one browser? multiple tabs? IDK
 
 # Discovery log
 
-* solving a few things at once: common bundler config, node/browser showdown, multiple client entries for remix
+- solving a few things at once: common bundler config, node/browser showdown, multiple client entries for remix
 
-* node solution:
+- node solution:
 
 ```sh
 npm i --save-dev esbuild-runner global-jsdom @testing-library/react
@@ -57,12 +66,12 @@ mocha -r esbuild-runner/register app/loading.test.tsx
 mocha -r esbuild-runner/register -r global-jsdom/register app/loading.test.tsx
 ```
 
-* can omit react imports by using [react-shim + inject from esbuild](https://esbuild.github.io/content-types/#auto-import-for-jsx), passing thru to the runner
+- can omit react imports by using [react-shim + inject from esbuild](https://esbuild.github.io/content-types/#auto-import-for-jsx), passing thru to the runner
 
-* might be able to commandeer the entry.client.tsx to build the test bundle instead of the regular app bundle
+- might be able to commandeer the entry.client.tsx to build the test bundle instead of the regular app bundle
 
 Ideally this would be a development server addition, not a full on "mode", but that's fine
 
-* OK so you can add a test route that uses esbuild as the Loader mechanism
+- OK so you can add a test route that uses esbuild as the Loader mechanism
 
-* is this any better than letting cypress bundle specs with esbuild?
+- is this any better than letting cypress bundle specs with esbuild?

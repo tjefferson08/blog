@@ -1,7 +1,7 @@
 ---
 meta:
-  title: My First Post
-  description: Isn't this awesome?
+  title: NPM / npx magic
+  description: More infro
 headers:
   Cache-Control: no-cache
 ---
