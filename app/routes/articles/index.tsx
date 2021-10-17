@@ -23,15 +23,23 @@ export const loader = () => {
 export default function ArticlesList() {
   const articleInfos = useLoaderData();
   return (
-    <section>
-      <ul className="space-y-4">
+    <section className="max-w-xl mx-auto">
+      <ul>
         {articleInfos.map((info) => (
-          <li
-            key={info.slug}
-            className="w-64 h-3 text-blue-500 bg-gradient-to-br from-fuchsia-500 to-purple-600"
-          >
-            <Link to={info.slug}>{info.title}</Link>
-            {info.descripion ? info.description : null}
+          <li key={info.slug} className="p-4">
+            <article>
+              <header>
+                <Link to={info.slug}>
+                  <h2 className="text-xl text-green-600 font-medium">
+                    {info.title}
+                  </h2>
+                </Link>
+              </header>
+              <small>
+                <time dateTime="2020-04-10">April 10, 2020</time>
+              </small>
+              <p>{info.description}</p>
+            </article>
           </li>
         ))}
       </ul>

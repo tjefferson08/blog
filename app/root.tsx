@@ -56,15 +56,20 @@ export default function App() {
   const matches = useMatches();
   return (
     <Document>
-      <header className="breadcrumbs">
-        <ul>
+      <section className="max-w-xl mx-auto p-4">
+        <ul className="flex">
           {matches
             .filter((match) => match.handle?.breadcrumb)
             .map((match, idx) => (
-              <li key={idx}>{match.handle.breadcrumb(match)}</li>
+              <li
+                className="after:mx-2 after:content-['/'] last:after:content-['']"
+                key={idx}
+              >
+                {match.handle.breadcrumb(match)}
+              </li>
             ))}
         </ul>
-      </header>
+      </section>
       <Outlet />
       <footer>
         <p>This page was rendered at {data.date.toLocaleString()}</p>
