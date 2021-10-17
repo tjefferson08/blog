@@ -10,11 +10,14 @@ import {
   LiveReload,
   Outlet,
 } from "remix";
-
+import tailwindUrl from "./styles/tailwind.css";
 import stylesUrl from "./styles/global.css";
 
 export let links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }];
+  return [
+    { rel: "stylesheet", href: tailwindUrl },
+    { rel: "stylesheet", href: stylesUrl },
+  ];
 };
 
 export let loader: LoaderFunction = async () => {

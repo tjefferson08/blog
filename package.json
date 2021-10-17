@@ -5,21 +5,26 @@
   "license": "",
   "main": "dist/worker.js",
   "scripts": {
+    "prebuild": "rm -rf build && npm run build:css",
     "build": "remix build",
     "dev": "remix watch",
     "postinstall": "remix setup cloudflare-workers",
     "build:worker": "esbuild --bundle --sourcemap --outdir=dist ./worker",
     "start": "miniflare --watch",
-    "deploy": "npm run build && wrangler publish"
+    "deploy": "npm run build && wrangler publish",
+    "watch:css": "tailwindcss --output ./app/styles/tailwind.css --config ./config/tailwind.js --watch",
+    "build:css": "tailwindcss --output ./app/styles/tailwind.css --config ./config/tailwind.js --minify"
   },
   "dependencies": {
     "@remix-run/cloudflare-workers": "0.19.3",
     "@remix-run/react": "0.19.3",
+    "clsx": "^1.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "6.0.0-beta.6",
     "rehype-highlight": "^4.1.0",
-    "remix": "0.19.3"
+    "remix": "0.19.3",
+    "tailwindcss": "^2.2.17"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.2",
