@@ -4,6 +4,7 @@ import * as flashCards from "./flash-cards.mdx";
 import * as jestVsBrowser from "./jest-vs-browser.md";
 import * as privateSubnets from "./private-subnet-access.md";
 import * as terraformRepo from "./terraform-repo-structure.md";
+import * as toolchain from "./toolchain.md";
 
 const articleInfoFor = (mod: typeof npmNpxMagic) => ({
   slug: mod.filename.replace(/\.mdx?$/, ""),
@@ -17,6 +18,7 @@ export const loader = () => {
     jestVsBrowser,
     privateSubnets,
     terraformRepo,
+    toolchain,
   ].map(articleInfoFor);
 };
 
